@@ -76,7 +76,7 @@ def oversample_minoroty(X_train, y_train, random_state = RANDOM_SEED):
 
     fraud_repeat_count = n_legit // n_fraud
 
-    print(f"Oversampling: repeating {n_fraud} fraud samples * {fraud_repeat_count}, which is {n_fraud * fraud_repeat_count} fraud samples")
+    print(f"Oversampling: repeating {n_fraud} fraud samples * {fraud_repeat_count}, which is arround {n_fraud * fraud_repeat_count} fraud samples")
 
     oversampled_fraud_indicies = np.tile(fraud_indicies, fraud_repeat_count)
 
