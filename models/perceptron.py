@@ -1,9 +1,8 @@
 import numpy as np
-from config import PERCEPTRON_LR, PERCEPTRON_EPOCHS
 
 class Perceptron:
 
-    def __init__(self, input_dim, lr = PERCEPTRON_LR):
+    def __init__(self, input_dim, lr):
         self.lr = lr
         self.weights = np.zeros(input_dim)
         self.bias = 0.0
@@ -15,7 +14,7 @@ class Perceptron:
         linear_output = np.dot(x, self.weights) + self.bias
         return self.activation(linear_output)
     
-    def train(self, X, y, epochs = PERCEPTRON_EPOCHS):
+    def train(self, X, y, epochs):
         n_samples = X.shape[0]
 
         for epoch in range(epochs):
@@ -36,3 +35,9 @@ class Perceptron:
 
             print(f"[PERCEPTRON] Epoch {epoch + 1}/{epoch} - misclassifications: {errors}")
         
+    def predict(self, X):
+        return np.array([self.predict_one(x) for x in X])
+    
+    def predict_fraud_scores(self, X):
+        z = X @ self.weights + self.bias
+        return 1.0 / (1.0 + np.exp(-np.clip(z, -500, 500)))

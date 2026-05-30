@@ -59,13 +59,13 @@ def preprocess_data(dataset):
     return X_train, X_test, y_train, y_test, scaler
     
 
-def save_scalar(scalar, path):
+def save_scaler(scaler, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
     with open(path, "wb") as f:
-        pickle.dump(scalar, f)
+        pickle.dump(scaler, f)
 
-    print(f"Scalar saved in: {path}")
+    print(f"Scaler saved in: {path}")
 
 def oversample_minoroty(X_train, y_train, random_state = RANDOM_SEED):
     fraud_indicies = np.where(y_train == 1)[0]
