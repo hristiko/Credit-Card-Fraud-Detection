@@ -1,8 +1,9 @@
 import numpy as np
+from config import PERCEPTRON_LR, PERCEPTRON_EPOCHS
 
-class Percpetron:
+class Perceptron:
 
-    def __init__(self, input_dim, lr =0.01):
+    def __init__(self, input_dim, lr = PERCEPTRON_LR):
         self.lr = lr
         self.weights = np.zeros(input_dim)
         self.bias = 0.0
@@ -14,7 +15,7 @@ class Percpetron:
         linear_output = np.dot(x, self.weights) + self.bias
         return self.activation(linear_output)
     
-    def train(self, X, y, epochs = 5):
+    def train(self, X, y, epochs = PERCEPTRON_EPOCHS):
         n_samples = X.shape[0]
 
         for epoch in range(epochs):
@@ -24,19 +25,14 @@ class Percpetron:
                 x_i = X[i]
                 y_true = y[i]
 
-                y_pred = self.predict_one(x_i)
+                y_predicted = self.predict_one(x_i)
 
-                if y_pred != y_true:
-                    update = self.lr * (y_true - y_pred)
+                if y_predicted != y_true:
+                    error = y_true - y_predicted
+                    update = self.lr * error
                     self.weights += update * x_i
                     self.bias += update 
                     errors += 1
 
             print(f"[PERCEPTRON] Epoch {epoch + 1}/{epoch} - misclassifications: {errors}")
         
-    def predict(self, X):
-        return np.array([self.predict_one(x) for x in X])
-    
-    def predict_proba(self, X):
-        z = X @ self.weights + self.bias
-        return 1.0 / (1.0 + np.exp(-np.clip(z, -500, 500)))
