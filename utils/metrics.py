@@ -7,7 +7,7 @@ def compute_metrics(y_true, y_predicted):
     y_predicted = np.array(y_predicted)
 
     confusion_mat = confusion_matrix(y_true, y_predicted, labels=[0,1])
-    true_negative, false_positive, false_negative, true_positive = confusion_mat.revel()
+    true_negative, false_positive, false_negative, true_positive = confusion_mat.ravel()
 
     total_predictions = len(y_true)
     correct_predictions = true_negative + true_positive
@@ -28,7 +28,7 @@ def compute_metrics(y_true, y_predicted):
 def print_metrics(metrics, model_name):
 
     accuracy_percentage = metrics["accuracy"] * 100
-    confusion_mat = metrics["confustion_matrix"]
+    confusion_mat = metrics["confusion_matrix"]
 
     print(f"MODEL: {model_name}")
     print("\nOverall Performance")

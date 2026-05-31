@@ -10,7 +10,7 @@ from config import TEST_SIZE, RANDOM_SEED
 def load_data(path):
     
     dataset = pd.read_csv(path)
-    print(f"Dataset loaded: {dataset.shape[0]:,} rows, {dataset.shape[1]} columns")
+    print(f"Dataset loaded: {dataset.shape[0]} rows, {dataset.shape[1]} columns")
     return dataset
 
 def preprocess_data(dataset):
@@ -45,16 +45,16 @@ def preprocess_data(dataset):
     fraudPrecentage = distTrain.get(1, 0) / sum(distTrain.values()) * 100
 
     print(
-        f"\n Training set: {X_train.shape[0]:, } samples"
-        f"({distTrain.get(0, 0):,} legit | {distTrain.get(1,0):,} fraud)"
+        f"\nTraining set: {X_train.shape[0]} samples"
+        f"({distTrain.get(0, 0)} legit | {distTrain.get(1,0)} fraud)"
     )
 
     print(
-        f"\n Test set: {X_test.shape[0]:, } samples"
-        f"({distTest.get(0, 0):,} legit | {distTest.get(1,0):,} fraud)"
+        f"\n Test set: {X_test.shape[0]:} samples"
+        f"({distTest.get(0, 0):} legit | {distTest.get(1,0)} fraud)"
     )
 
-    print(f"Fraud ratio in training: {fraudPrecentage:.4f}% \n")
+    print(f"Fraud ratio in training: {fraudPrecentage:.5f}% \n")
 
     return X_train, X_test, y_train, y_test, scaler
     
@@ -67,7 +67,7 @@ def save_scaler(scaler, path):
 
     print(f"Scaler saved in: {path}")
 
-def oversample_minoroty(X_train, y_train, random_state = RANDOM_SEED):
+def oversample_minority(X_train, y_train, random_state = RANDOM_SEED):
     fraud_indicies = np.where(y_train == 1)[0]
     legit_indicies = np.where(y_train == 0)[0]
 
@@ -88,7 +88,7 @@ def oversample_minoroty(X_train, y_train, random_state = RANDOM_SEED):
     X_balanced = X_train[all_indicies]
     y_balanced = y_train[all_indicies]
 
-    print(f"Balanced set: {np.sum(y_balanced=0)} legit | np.sum(y_balanced == 1) fraud\n")
+    print(f"Balanced set: {np.sum(y_balanced == 0)} LEGIT, {np.sum(y_balanced == 1)} FRAUD\n")
 
     return X_balanced, y_balanced
 
