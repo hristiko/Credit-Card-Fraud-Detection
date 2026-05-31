@@ -4,6 +4,7 @@ import numpy as np
 from utils.preprocessing import load_data, preprocess_data, save_scaler, oversample_minoroty
 from models.perceptron import Perceptron
 from config import PERCEPTRON_EPOCHS, PERCEPTRON_LR, SCALER_PATH, PERCEPTRON_WEIGHTS_PATH, PERCEPTRON_BIAS_PATH
+from utils.metrics import compute_metrics, print_metrics
 
 def main():
     print("\n----------------------------")
@@ -26,9 +27,9 @@ def main():
     np.save(PERCEPTRON_BIAS_PATH, np.array(perceptron.bias))
 
     y_predicted = perceptron.predict(X_test)
-    y_predict_fraud_scores = perceptron.predict_fraud_scores(X_test)
-
-    #metrics
+    
+    metrics = compute_metrics(y_test, y_predicted)
+    print_metrics(metrics, model_name="Perceptron")
 
 if __name__ == "__main__":
     main()
