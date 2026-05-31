@@ -33,7 +33,7 @@ class Perceptron:
                     self.bias += update 
                     errors += 1
 
-            print(f"[PERCEPTRON] Epoch {epoch + 1}/{epoch} - misclassifications: {errors}")
+            print(f"[PERCEPTRON] Epoch {epoch + 1}/{epochs} - misclassifications: {errors}")
         
     def predict(self, X):
         return np.array([self.predict_one(x) for x in X])
