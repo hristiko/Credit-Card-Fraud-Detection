@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 def compute_metrics(y_true, y_predicted):
 
@@ -13,9 +13,18 @@ def compute_metrics(y_true, y_predicted):
     correct_predictions = true_negative + true_positive
 
     accuracy = correct_predictions / total_predictions
+    precision = precision_score(y_true, y_predicted, zero_division=0)
+    recall = recall_score(y_true, y_predicted, zero_division=0)
+    f1 = f1_score(y_true, y_predicted, zero_division=0)
+    false_positive_rate = false_positive / (false_positive + true_negative)
+
 
     return {
         "accuracy": round(float(accuracy), 5),
+        "precision": round(float(precision), 5),
+        "recall": round(float(recall), 5),
+        "f1_score": round(float(f1), 5),
+        "false_positive_rate": round(float(false_positive_rate), 5),
         "correct_predictions": int(correct_predictions),
         "total_predictions": int(total_predictions),
         "fraud_detected": int(true_positive),
@@ -28,11 +37,21 @@ def compute_metrics(y_true, y_predicted):
 def print_metrics(metrics, model_name):
 
     accuracy_percentage = metrics["accuracy"] * 100
+    precision_percentage = metrics["precision"] * 100
+    recall_percentage = metrics["recall"] * 100
+    f1_percentage = metrics["f1_score"] * 100
+    false_positive_rate_percentage = metrics["false_positive_rate"] * 100
     confusion_mat = metrics["confusion_matrix"]
 
-    print(f"MODEL: {model_name}")
-    print("\nOverall Performance")
+    print(f"\nMODEL: {model_name}")
+    print("Overall Performance")
     print(f"Correct predictions: {accuracy_percentage:.2f}%")
+
+    print("\nClassification metrics")
+    print(f"Precision: {precision_percentage:.2f}%")
+    print(f"Recall: {recall_percentage:.2f}%")
+    print(f"F1-score: {f1_percentage:.2f}%")
+    print(f"False positive rate: {false_positive_rate_percentage:.2f}%")
 
     print("\nFraud Detection")
     print(f"Correct detection: {metrics['fraud_detected']}")

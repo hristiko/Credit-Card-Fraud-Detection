@@ -13,7 +13,7 @@ def main():
     data_set = load_data("data/creditcard.csv")
 
     X_train, X_test, y_train, y_test, scaler = preprocess_data(data_set)
-    save_scaler(save_scaler, SCALER_PATH)
+    save_scaler(scaler, SCALER_PATH)
 
     X_balanced_train, y_balanced_train = oversample_minority(X_train, y_train)
 

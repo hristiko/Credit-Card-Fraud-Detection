@@ -7,7 +7,7 @@ from config import PERCEPTRON_WEIGHTS_PATH, PERCEPTRON_BIAS_PATH
 
 def load_test_data():
 
-    dataset = load_data("data\creditcard.csv")
+    dataset = load_data("data/creditcard.csv")
 
     X_train, X_test, y_train, y_test, _ = preprocess_data(dataset)
 
@@ -37,7 +37,7 @@ def main():
     fraud_rate = (n_fraud / len(y_test)) * 100
 
     print(f"\nTest set: {n_legit} LEGITIMATE, {n_fraud} FRAUD")
-    print(f"Fraud rate in the test set: {fraud_rate}%")
+    print(f"Fraud rate in the test set: {fraud_rate:.5f}%")
 
     perceptron_evaluation_metrics = evaluate_perceptron(X_test, y_test)
 
