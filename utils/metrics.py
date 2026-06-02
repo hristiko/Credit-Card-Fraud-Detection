@@ -1,23 +1,26 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, average_precision_score
 
-def compute_metrics(y_true, y_predicted):
+def compute_metrics(y_correct_labels, y_predicted, y_fraud_scores = None, training_time=None):
 
-    y_true = np.array(y_true)
+    y_correct_labels = np.array(y_correct_labels)
     y_predicted = np.array(y_predicted)
 
-    confusion_mat = confusion_matrix(y_true, y_predicted, labels=[0,1])
+    confusion_mat = confusion_matrix(y_correct_labels, y_predicted, labels=[0,1])
     true_negative, false_positive, false_negative, true_positive = confusion_mat.ravel()
 
-    total_predictions = len(y_true)
+    total_predictions = len(y_correct_labels)
     correct_predictions = true_negative + true_positive
 
     accuracy = correct_predictions / total_predictions
-    precision = precision_score(y_true, y_predicted, zero_division=0)
-    recall = recall_score(y_true, y_predicted, zero_division=0)
-    f1 = f1_score(y_true, y_predicted, zero_division=0)
+    precision = precision_score(y_correct_labels, y_predicted, zero_division=0)
+    recall = recall_score(y_correct_labels, y_predicted, zero_division=0)
+    f1 = f1_score(y_correct_labels, y_predicted, zero_division=0)
     false_positive_rate = false_positive / (false_positive + true_negative)
-
+    if y_fraud_scores is not None:
+        pr_auc = round(float(average_precision_score(y_correct_labels, y_fraud_scores)), 6)
+    else:
+        pr_auc = "N/A"
 
     return {
         "accuracy": round(float(accuracy), 5),
@@ -27,11 +30,13 @@ def compute_metrics(y_true, y_predicted):
         "false_positive_rate": round(float(false_positive_rate), 5),
         "correct_predictions": int(correct_predictions),
         "total_predictions": int(total_predictions),
+        "pr_auc": pr_auc,
         "fraud_detected": int(true_positive),
         "fraud_missed": int(false_negative),
         "legit_as_fraud": int(false_positive),
         "true_legitimate": int(true_negative),
         "confusion_matrix": confusion_mat,
+        "training_time_sec": round(training_time, 2)
     }
 
 def print_metrics(metrics, model_name):
@@ -42,23 +47,27 @@ def print_metrics(metrics, model_name):
     f1_percentage = metrics["f1_score"] * 100
     false_positive_rate_percentage = metrics["false_positive_rate"] * 100
     confusion_mat = metrics["confusion_matrix"]
+    pr_auc = metrics["pr_auc"]
+    time = metrics["training_time_sec"]
 
     print(f"\nMODEL: {model_name}")
-    print("Overall Performance")
+    print("Overall Performance:")
     print(f"Correct predictions: {accuracy_percentage:.2f}%")
 
-    print("\nClassification metrics")
+    print("\nClassification metrics:")
     print(f"Precision: {precision_percentage:.2f}%")
     print(f"Recall: {recall_percentage:.2f}%")
     print(f"F1-score: {f1_percentage:.2f}%")
     print(f"False positive rate: {false_positive_rate_percentage:.2f}%")
+    print(f"PR-AUC: {pr_auc:.5f}")    
+    print(f"Training time (in sec): {time}")
 
-    print("\nFraud Detection")
+    print("\nFraud Detection:")
     print(f"Correct detection: {metrics['fraud_detected']}")
     print(f"Missed: {metrics['fraud_missed']}")
     print(f"Legit transactions marked as fraud: {metrics['legit_as_fraud']}")
 
-    print("\nConfusion matrix")
+    print("\nConfusion matrix:")
     print(f"  {'':20} Predicted Legit   Predicted Fraud")
     print(f"  {'Actual Legit':<20} {confusion_mat[0][0]:>14,}   {confusion_mat[0][1]:>14,}")
     print(f"  {'Actual Fraud':<20} {confusion_mat[1][0]:>14,}   {confusion_mat[1][1]:>14,}")

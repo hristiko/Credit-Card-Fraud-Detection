@@ -92,6 +92,15 @@ def oversample_minority(X_train, y_train, random_state = RANDOM_SEED):
 
     return X_balanced, y_balanced
 
+def get_class_weights(y_train):
+    classes = np.unique(y_train)
+
+    weights = compute_class_weight(class_weight="balanced", classes=classes, y=y_train)
+    weight_dict = {int(c): float(w) for c, w in zip(classes, weights)}
+
+    print(f"Class weights: {weight_dict}")
+    
+    return weight_dict
 
 def get_class_distribution(y):
     unique, counts = np.unique(y, return_counts=True)
