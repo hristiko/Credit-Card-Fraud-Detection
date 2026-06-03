@@ -39,22 +39,22 @@ def preprocess_data(dataset):
     X_train = X_train.values
     X_test = X_test.values
 
-    distTrain = get_class_distribution(y_train)
-    distTest = get_class_distribution(y_test)
+    distribution_train_data = get_class_distribution(y_train)
+    distribution_test_data = get_class_distribution(y_test)
 
-    fraudPrecentage = distTrain.get(1, 0) / sum(distTrain.values()) * 100
+    fraud_precentage = distribution_train_data.get(1, 0) / sum(distribution_train_data.values()) * 100
 
     print(
         f"\nTraining set: {X_train.shape[0]} samples"
-        f"({distTrain.get(0, 0)} legit | {distTrain.get(1,0)} fraud)"
+        f"({distribution_train_data.get(0, 0)} legit | {distribution_train_data.get(1,0)} fraud)"
     )
 
     print(
         f"\n Test set: {X_test.shape[0]:} samples"
-        f"({distTest.get(0, 0):} legit | {distTest.get(1,0)} fraud)"
+        f"({distribution_test_data.get(0, 0):} legit | {distribution_test_data.get(1,0)} fraud)"
     )
 
-    print(f"Fraud ratio in training: {fraudPrecentage:.5f}% \n")
+    print(f"Fraud ratio in training: {fraud_precentage:.5f}% \n")
 
     return X_train, X_test, y_train, y_test, scaler
     

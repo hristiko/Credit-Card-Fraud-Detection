@@ -29,7 +29,7 @@ def main():
     y_predicted = perceptron.predict(X_test)
     
     metrics = compute_metrics(y_test, y_predicted)
-    print_metrics(metrics, model_name="Perceptron")
+    print_metrics(metrics, model_name="Perceptron", training_time = end_time)
 
 if __name__ == "__main__":
     main()
