@@ -18,13 +18,7 @@ def preprocess_data(dataset):
     X = dataset.drop(columns="Class")
     y = dataset["Class"].values
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_SEED,
-        stratify=y
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE, random_state=RANDOM_SEED, stratify=y)
 
     scaler = StandardScaler()
 
@@ -44,15 +38,12 @@ def preprocess_data(dataset):
 
     fraud_precentage = distribution_train_data.get(1, 0) / sum(distribution_train_data.values()) * 100
 
-    print(
-        f"\nTraining set: {X_train.shape[0]} samples"
-        f"({distribution_train_data.get(0, 0)} legit | {distribution_train_data.get(1,0)} fraud)"
-    )
+    print(f"\nTraining set: {X_train.shape[0]} samples")
+    print(f"({distribution_train_data.get(0, 0)} legit | {distribution_train_data.get(1,0)} fraud)")
 
-    print(
-        f"\n Test set: {X_test.shape[0]:} samples"
-        f"({distribution_test_data.get(0, 0):} legit | {distribution_test_data.get(1,0)} fraud)"
-    )
+
+    print(f"\n Test set: {X_test.shape[0]:} samples")
+    print(f"({distribution_test_data.get(0, 0):} legit | {distribution_test_data.get(1,0)} fraud)")
 
     print(f"Fraud ratio in training: {fraud_precentage:.5f}% \n")
 
