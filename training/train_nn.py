@@ -81,7 +81,7 @@ def main():
     y_fraud_scores = model.predict(x=X_test, verbose=0).flatten()
     y_predicted = (y_fraud_scores >= best_threshold).astype(int)
 
-    metrics = compute_metrics(y_correct_labels=y_test, y_predicted=y_predicted, y_fraud_scores=y_fraud_scores, training_time=training_time)
+    metrics = compute_metrics(y_correct_labels=y_test, y_predicted=y_predicted, y_fraud_scores=y_fraud_scores, evaluation_time=training_time)
 
     print_metrics(metrics, model_name="Artificial Neural Network")
 

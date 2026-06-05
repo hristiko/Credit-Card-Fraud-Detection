@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, average_precision_score
 
-def compute_metrics(y_correct_labels, y_predicted, y_fraud_scores = None, training_time=None):
+def compute_metrics(y_correct_labels, y_predicted, y_fraud_scores = None, evaluation_time=None):
 
     y_correct_labels = np.array(y_correct_labels)
     y_predicted = np.array(y_predicted)
@@ -36,7 +36,7 @@ def compute_metrics(y_correct_labels, y_predicted, y_fraud_scores = None, traini
         "legit_as_fraud": int(false_positive),
         "true_legitimate": int(true_negative),
         "confusion_matrix": confusion_mat,
-        "training_time_sec": round(training_time, 2)
+        "evaluation_time_sec": round(evaluation_time, 2)
     }
 
 def print_metrics(metrics, model_name):
@@ -48,7 +48,7 @@ def print_metrics(metrics, model_name):
     false_positive_rate_percentage = metrics["false_positive_rate"] * 100
     confusion_mat = metrics["confusion_matrix"]
     pr_auc = metrics["pr_auc"]
-    time = metrics["training_time_sec"]
+    time = metrics["evaluation_time_sec"]
 
     print(f"\nMODEL: {model_name}")
     print("Overall Performance:")
@@ -60,7 +60,7 @@ def print_metrics(metrics, model_name):
     print(f"F1-score: {f1_percentage:.2f}%")
     print(f"False positive rate: {false_positive_rate_percentage:.2f}%")
     print(f"PR-AUC: {pr_auc:.5f}")    
-    print(f"Training time (in sec): {time}")
+    print(f"Evaluation time (in sec): {time}")
 
     print("\nFraud Detection:")
     print(f"Correct detection: {metrics['fraud_detected']}")
