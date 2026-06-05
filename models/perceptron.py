@@ -37,7 +37,3 @@ class Perceptron:
         
     def predict(self, X):
         return np.array([self.predict_one(x) for x in X])
-    
-    def predict_fraud_scores(self, X):
-        z = X @ self.weights + self.bias
-        return 1.0 / (1.0 + np.exp(-np.clip(z, -500, 500)))
