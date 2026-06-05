@@ -1,11 +1,13 @@
 import os
 import time
 import numpy as np
+import tensorflow as tf
 from sklearn.metrics import f1_score
+from sklearn.model_selection import train_test_split
 from utils.preprocessing import load_data, preprocess_data, save_scaler, get_class_weights
 from utils.metrics import compute_metrics, print_metrics
 from models.neural_network import build_model
-from config import NN_EPOCHS, NN_BATCH_SIZE, SCALER_PATH, NN_MODEL_PATH, NN_THRESHOLD_PATH
+from config import NN_EPOCHS, NN_BATCH_SIZE, SCALER_PATH, NN_MODEL_PATH, NN_THRESHOLD_PATH, RANDOM_SEED
 
 def find_best_threshold(y_correct_labels, y_fraud_scores):
     best_threshold = None
@@ -19,7 +21,7 @@ def find_best_threshold(y_correct_labels, y_fraud_scores):
             best_threshold = round(float(threshold), 2)
 
     print(f"\nBest threshold: {best_threshold:3f}")
-    print(f"F1 = {best_f1:4f} on training data")
+    print(f"F1 = {best_f1:4f} on validation data")
     return best_threshold
 
 def main():
@@ -31,16 +33,46 @@ def main():
 
     save_scaler(scaler, SCALER_PATH)
 
-    class_weights = get_class_weights(y_train)
+    #class_weights = get_class_weights(y_train)
 
-    model = build_model(X_train.shape[1])
+    X_train_nn, X_validation, y_train_nn, y_validation = train_test_split(
+        X_train,
+        y_train,
+        test_size=0.2,
+        random_state=RANDOM_SEED,
+        stratify=y_train
+    )
+
+
+    model = build_model(X_train_nn.shape[1])
     model.summary()
+
+    callbacks = [
+        tf.keras.callbacks.ReduceLROnPlateau(
+            monitor="val_loss",
+            factor=0.2,
+            patience=2,
+            min_lr=0.000001,
+            verbose=1
+        ),
+        tf.keras.callbacks.EarlyStopping(
+            monitor="val_pr_auc",
+            mode="max",
+            patience=3,
+            restore_best_weights=True,
+            verbose=1
+        )
+    ]
+
     start_time = time.time()
-    model.fit(x=X_train, y=y_train, epochs=NN_EPOCHS, batch_size=NN_BATCH_SIZE, validation_split=0.1, class_weight = class_weights, verbose=1)
+    model.fit(x=X_train_nn, y=y_train_nn, epochs=NN_EPOCHS, batch_size=NN_BATCH_SIZE, validation_data=(X_validation, y_validation), callbacks=callbacks, verbose=1)
     training_time = time.time() - start_time
 
-    train_fraud_scores = model.predict(x=X_train, verbose=0).flatten()
-    best_threshold = find_best_threshold(y_correct_labels=y_train, y_fraud_scores=train_fraud_scores)
+    validation_fraud_scores = model.predict(X_validation, verbose=0).flatten()
+    best_threshold = find_best_threshold(y_correct_labels=y_validation, y_fraud_scores=validation_fraud_scores)
+    
+    #train_fraud_scores = model.predict(x=X_train, verbose=0).flatten()
+    #best_threshold = find_best_threshold(y_correct_labels=y_train, y_fraud_scores=train_fraud_scores)
 
     os.makedirs(os.path.dirname(NN_THRESHOLD_PATH), exist_ok=True)
     with open(NN_THRESHOLD_PATH, "w") as f:
