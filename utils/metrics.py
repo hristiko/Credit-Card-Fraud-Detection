@@ -59,7 +59,10 @@ def print_metrics(metrics, model_name):
     print(f"Recall: {recall_percentage:.2f}%")
     print(f"F1-score: {f1_percentage:.2f}%")
     print(f"False positive rate: {false_positive_rate_percentage:.2f}%")
-    print(f"PR-AUC: {pr_auc:.5f}")    
+    if pr_auc == "N/A":
+        print(f"PR-AUC: {pr_auc}")
+    else:
+        print(f"PR-AUC: {pr_auc:.5f}")   
     print(f"Evaluation time (in sec): {time}")
 
     print("\nFraud Detection:")
