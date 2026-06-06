@@ -50,6 +50,8 @@ def evaluate_nn(X_test, y_test):
     start_time = time.time()
 
     y_fraud_scores = model.predict(x=X_test, verbose=0).flatten()
+
+
     y_predicted = (y_fraud_scores >= threshold).astype(int)
 
     evaluation_time = time.time() - start_time
