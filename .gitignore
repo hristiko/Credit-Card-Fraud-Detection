@@ -1,6 +1,4 @@
 creditcard.csv
-threshold_metrics.csv
-nn_test_predictions.csv
 saved_models/
 __pycache__/
 *.pkl
@@ -8,3 +6,4 @@ __pycache__/
 *.npy
 .env
 venv/
+analysis_outputs/

@@ -47,16 +47,7 @@ def preprocess_data(dataset):
 
     print(f"Fraud ratio in training: {fraud_precentage:.5f}% \n")
 
-    return X_train_final, X_test_final, y_train, y_test, scaler
-    
-
-def save_scaler(scaler, path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    with open(path, "wb") as f:
-        pickle.dump(scaler, f)
-
-    print(f"Scaler saved in: {path}")
+    return X_train_final, X_test_final, y_train, y_test
 
 def oversample_minority(X_train, y_train, random_state = RANDOM_SEED):
     fraud_indicies = np.where(y_train == 1)[0]

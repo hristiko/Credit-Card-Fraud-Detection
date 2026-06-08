@@ -12,7 +12,7 @@ def load_test_data():
 
     dataset = load_data("data/creditcard.csv")
 
-    X_train, X_test, y_train, y_test, _ = preprocess_data(dataset)
+    X_train, X_test, y_train, y_test = preprocess_data(dataset)
 
     return X_test, y_test
 

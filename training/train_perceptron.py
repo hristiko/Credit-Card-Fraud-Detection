@@ -1,9 +1,9 @@
 import time
 import os
 import numpy as np
-from utils.preprocessing import load_data, preprocess_data, save_scaler, oversample_minority
+from utils.preprocessing import load_data, preprocess_data, oversample_minority
 from models.perceptron import Perceptron
-from config import PERCEPTRON_EPOCHS, PERCEPTRON_LR, SCALER_PATH, PERCEPTRON_WEIGHTS_PATH, PERCEPTRON_BIAS_PATH
+from config import PERCEPTRON_EPOCHS, PERCEPTRON_LR, PERCEPTRON_WEIGHTS_PATH, PERCEPTRON_BIAS_PATH
 from utils.metrics import compute_metrics, print_metrics
 
 def main():
@@ -12,8 +12,7 @@ def main():
 
     data_set = load_data("data/creditcard.csv")
 
-    X_train, X_test, y_train, y_test, scaler = preprocess_data(data_set)
-    save_scaler(scaler, SCALER_PATH)
+    X_train, X_test, y_train, y_test = preprocess_data(data_set)
 
     X_balanced_train, y_balanced_train = oversample_minority(X_train, y_train)
 

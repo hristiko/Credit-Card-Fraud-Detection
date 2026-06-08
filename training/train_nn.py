@@ -4,10 +4,10 @@ import numpy as np
 import tensorflow as tf
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
-from utils.preprocessing import load_data, preprocess_data, save_scaler#, get_class_weights
+from utils.preprocessing import load_data, preprocess_data#, get_class_weights
 from utils.metrics import compute_metrics, print_metrics
 from models.neural_network import build_model
-from config import NN_EPOCHS, NN_BATCH_SIZE, SCALER_PATH, NN_MODEL_PATH, NN_THRESHOLD_PATH, RANDOM_SEED
+from config import NN_EPOCHS, NN_BATCH_SIZE, NN_MODEL_PATH, NN_THRESHOLD_PATH, RANDOM_SEED
 
 def find_best_threshold(y_correct_labels, y_fraud_scores):
     best_threshold = None
@@ -31,7 +31,6 @@ def main():
     dataset = load_data("data/creditcard.csv")
     X_train, X_test, y_train, y_test, scaler = preprocess_data(dataset)
 
-    save_scaler(scaler, SCALER_PATH)
 
     #class_weights = get_class_weights(y_train)
 
