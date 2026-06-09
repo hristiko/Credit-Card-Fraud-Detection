@@ -20,7 +20,7 @@ def find_best_threshold(y_correct_labels, y_fraud_scores):
             best_f1 = f1
             best_threshold = round(float(threshold), 2)
 
-    print(f"\nBest threshold: {best_threshold:3f}")
+    print(f"\nBest threshold: {best_threshold:4f}")
     print(f"F1 = {best_f1:4f} on validation data")
     return best_threshold
 
@@ -29,7 +29,7 @@ def main():
     print("Neural network trianing")
 
     dataset = load_data("data/creditcard.csv")
-    X_train, X_test, y_train, y_test, scaler = preprocess_data(dataset)
+    X_train, X_test, y_train, y_test = preprocess_data(dataset)
 
 
     #class_weights = get_class_weights(y_train)
