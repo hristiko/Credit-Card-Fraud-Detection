@@ -12,7 +12,7 @@ The project compares two models:
 Install the required libraries before running the scripts:
 
 ```bash
-pip install numpy pandas scikit-learn tensorflow matplotlib seaborn
+pip install numpy pandas scikit-learn tensorflow matplotlib
 ```
 
 ## Libraries Used
@@ -23,7 +23,6 @@ pandas       - loading and handling the dataset
 scikit-learn - preprocessing, metrics, Perceptron
 tensorflow   - Artificial Neural Network
 matplotlib   - plotting graphs
-seaborn      - visualizing confusion matrices
 ```
 
 ## Running the Project
